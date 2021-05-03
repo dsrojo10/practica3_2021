@@ -6,15 +6,14 @@ using namespace std;
 int contarCeros(string cadena);
 int contarUnos(string cadena);
 //LAS FUNCIONES PARA INVERTIR RECIBEN DOS CADENAS IGUALES YA QUE EL ALGORITMO
-//NECESITA TENER UNA COPIA PARA INVERTIR ESA
-string invAll(string, string); //Funcion que recibe la cadena a invertir (recibe la cadena y su copia)
-string inv2(string, string); //Funcion que inverte cada 2 bits
-string inv3(string, string); //funcion que invierte cada 3 bits
-void Metodo1 (string);
+//NECESITA TENER UNA COPIA PARA INVERTIR ESA COPIA
+string invAll(string, string); //Funcion que recibe la cadena a invertir <recibe la cadena y su copia>
+string inv2(string, string); //Funcion que inverte cada 2 bits <recibe la cadena y su copia>
+string inv3(string, string); //funcion que invierte cada 3 bits <recibe la cadena y su copia>
+void Metodo1 (string); //Funcion para el metodo1 de encriptacion <recibe el str a encriptar>
 
 
 int main() {
-
     string cadena = "01000001011000100100001101100100";
     Metodo1(cadena);
 
@@ -62,14 +61,16 @@ string inv3(string cadena, string cadena2){
 }
 
 void Metodo1 (string cadena){
+    int n;
+    cout << "Ingrese el numero para las particiones: "; cin >> n;
     cout << cadena << endl;
 
-    string cadena1 = cadena.substr(0, 4);
+    string cadena1 = cadena.substr(0, n);
     string cadena2 = cadena1;
     int unos=contarUnos(cadena1); int ceros=contarCeros(cadena1);
     cout << invAll(cadena1,cadena2);
-    for (int i=4; i<int(cadena.size());i+=4){
-      string cadena1 = cadena.substr(i, 4);
+    for (int i=n; i<int(cadena.size());i+=n){
+      string cadena1 = cadena.substr(i, n);
       string cadena2 = cadena1;
       if(unos==ceros)
         cout << invAll(cadena1,cadena2);

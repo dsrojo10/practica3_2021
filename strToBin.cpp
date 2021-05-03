@@ -9,21 +9,19 @@ string lectura(string); //funcion que recibe el nombre del archivo y carga en un
 void strToBin (string);//funcion que recibe un str y lo escribe en un archivo en binario
 int contarCeros(string cadena);
 int contarUnos(string cadena);
+//LAS FUNCIONES PARA INVERTIR RECIBEN DOS CADENAS IGUALES YA QUE EL ALGORITMO
+//NECESITA TENER UNA COPIA PARA INVERTIR ESA COPIA
+string invAll(string, string); //Funcion que recibe la cadena a invertir <recibe la cadena y su copia>
+string inv2(string, string); //Funcion que inverte cada 2 bits <recibe la cadena y su copia>
+string inv3(string, string); //funcion que invierte cada 3 bits <recibe la cadena y su copia>
+void Metodo1 (string); //Funcion para el metodo1 de encriptacion <recibe el str a encriptar>
 
 int main(){
 	
-	string myString = lectura("cadena.txt");
+	string myString = lectura("cadena.txt"); //Cargamos cadena a convertir a binario
 	strToBin(myString); //Invocamos la funcion
-	string cadena = lectura("prueba.txt"); 
-	for (int i=0; i<(cadena.size()-1);i+=4){ // -1 ciclo para no tener en cuenta el salto de linea final
-    string cadena1 = cadena.substr(i, 4);
-    cout << cadena1 << endl;
-    cout << "La cantidad de 0 es: " << contarCeros(cadena1) << endl;
-    cout << "La cantidad de 1 es: " << contarUnos(cadena1) << endl;
-    cout << "La cantidad de #'s es: " << cadena1.size() << endl;
-    cout << endl << endl;
-  }
-  
+	string cadena = lectura("prueba.txt"); //Cargamos el binario ya convertido (el cual fue escrito en el archivo prueba.txt) 
+	Metodo1(cadena);  
 	return 0;
 }
 
@@ -66,3 +64,65 @@ int contarUnos(string cadena){
   }
   return unos;
 }
+
+string invAll(string cadena, string cadena2){
+  for(int i=0;i<int(cadena.size());i++){
+    if(cadena[i]=='0') cadena2[i]='1';
+    else if(cadena[i]=='1') cadena2[i]='0';
+  }
+  return cadena2;
+}
+
+string inv2(string cadena, string cadena2){
+  for(int i=1;i<int(cadena.size());i+=2){
+    if(cadena[i]=='0') cadena2[i]='1';
+    else if(cadena[i]=='1') cadena2[i]='0';
+  }
+  return cadena2;
+}
+
+string inv3(string cadena, string cadena2){
+  for(int i=2;i<int(cadena.size());i+=3){
+    if(cadena[i]=='0') cadena2[i]='1';
+    else if(cadena[i]=='1') cadena2[i]='0';
+  }
+  return cadena2;
+}
+
+void Metodo1 (string cadena){
+    int n;
+    cout << "Ingrese el numero para las particiones: "; cin >> n;
+    cout << cadena << endl;
+    ofstream archivo;
+  	archivo.open("encriptado1.txt",ios::out); //Creamos archivo para guardar la encriptación
+
+    string cadena1 = cadena.substr(0, n);
+    string cadena2 = cadena1;
+    int unos=contarUnos(cadena1); int ceros=contarCeros(cadena1);
+    cout << invAll(cadena1,cadena2);
+    archivo << invAll(cadena1,cadena2);
+    for (int i=n; i<int(cadena.size());i+=n){
+      string cadena1 = cadena.substr(i, n);
+      string cadena2 = cadena1;
+      if(unos==ceros){
+      	cout << invAll(cadena1,cadena2);
+        archivo << invAll(cadena1,cadena2);
+	  }
+        
+      else if(ceros>unos){
+	    cout << inv2(cadena1,cadena2);
+        archivo << inv2(cadena1,cadena2);
+	  }
+      else if(unos>ceros){
+      	cout << inv3(cadena1,cadena2);
+        archivo << inv3(cadena1,cadena2);
+	  }
+      unos=contarUnos(cadena1); ceros=contarCeros(cadena1);
+    }
+    cout << endl;
+    archivo << endl;
+}
+
+
+
+
