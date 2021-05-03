@@ -7,15 +7,16 @@ using namespace std;
 
 string lectura(string); //funcion que recibe el nombre del archivo y carga en un string todo lo que hay
 void strToBin (string);//funcion que recibe un str y lo escribe en un archivo en binario
+void binToStr(string cadena); 
 int contarCeros(string cadena);
 int contarUnos(string cadena);
 //LAS FUNCIONES PARA INVERTIR RECIBEN DOS CADENAS IGUALES YA QUE EL ALGORITMO
 //NECESITA TENER UNA COPIA PARA INVERTIR ESA COPIA
-string invAll(string, string); //Funcion que recibe la cadena a invertir <recibe la cadena y su copia>
-string inv2(string, string); //Funcion que inverte cada 2 bits <recibe la cadena y su copia>
-string inv3(string, string); //funcion que invierte cada 3 bits <recibe la cadena y su copia>
+string invAll(string,string&); //Funcion que recibe la cadena a invertir <recibe la cadena y su copia>
+string inv2(string,string&); //Funcion que inverte cada 2 bits <recibe la cadena y su copia>
+string inv3(string,string&); //funcion que invierte cada 3 bits <recibe la cadena y su copia>
 void Metodo1 (string); //Funcion para el metodo1 de encriptacion <recibe el str a encriptar>
-void dMetodo1 (string cadena); //Funcion para desencriptar metodo1 <recibe el str a desencriptar>
+void dMetodo1 (string); //Funcion para desencriptar metodo1 <recibe el str a desencriptar>
 
 int main(){
 	
@@ -24,7 +25,11 @@ int main(){
 	string cadena = lectura("prueba.txt"); //Cargamos el binario ya convertido (el cual fue escrito en el archivo prueba.txt) 
 	Metodo1(cadena); 
 	cadena = lectura("encriptado1.txt");
-	dMetodo1(cadena); 
+	dMetodo1(cadena);
+	cadena = lectura("desencriptado1.txt"); //Cargamos el archivo binario ya desencriptado, antes de convertirlo a string de nuevo
+    cout << cadena;
+	binToStr(cadena);  
+	
 	return 0;
 }
 
@@ -36,6 +41,19 @@ void strToBin (string cadena){
     //cout << bitset<8>(cadena.c_str()[i]); //Impresion por consola para verificar.
   }
   archivo.close();
+}
+
+void binToStr(string cadena) {
+  ofstream archivo;
+  archivo.open("Desencrip_Str.txt",ios::out); //Abriendo archivo
+  for (int i=0; i<int(cadena.size());i+=8){
+  	if(cadena[i]!='\n'){
+  		string cadena1 = cadena.substr(i, 8);
+    	cout << char(bitset<8>(cadena1).to_ulong());
+    	archivo << char(bitset<8>(cadena1).to_ulong());
+	  }
+    }
+    archivo.close();
 }
 
 string lectura(string cadena){
@@ -68,7 +86,7 @@ int contarUnos(string cadena){
   return unos;
 }
 
-string invAll(string cadena, string cadena2){
+string invAll(string cadena, string& cadena2){
   for(int i=0;i<int(cadena.size());i++){
     if(cadena[i]=='0') cadena2[i]='1';
     else if(cadena[i]=='1') cadena2[i]='0';
@@ -76,7 +94,7 @@ string invAll(string cadena, string cadena2){
   return cadena2;
 }
 
-string inv2(string cadena, string cadena2){
+string inv2(string cadena, string& cadena2){
   for(int i=1;i<int(cadena.size());i+=2){
     if(cadena[i]=='0') cadena2[i]='1';
     else if(cadena[i]=='1') cadena2[i]='0';
@@ -84,7 +102,7 @@ string inv2(string cadena, string cadena2){
   return cadena2;
 }
 
-string inv3(string cadena, string cadena2){
+string inv3(string cadena, string& cadena2){
   for(int i=2;i<int(cadena.size());i+=3){
     if(cadena[i]=='0') cadena2[i]='1';
     else if(cadena[i]=='1') cadena2[i]='0';
@@ -127,8 +145,7 @@ void Metodo1 (string cadena){
 }
 
 void dMetodo1 (string cadena){
-	//En este metodo a mi parecer cuando hayan mas ceros que unos se debe invertir cada 3
-	//Pero esta funcionando correctamente invirtiendo cada 2 igual que cuando hay mayor numero 
+	//En la desencriptacion no evaluamos en la vieja, si no que evaluamos en la que acabo de ser convertida 
     int n;
     cout << "Ingrese el numero para las particiones: "; cin >> n;
     cout << cadena << endl;
@@ -137,9 +154,9 @@ void dMetodo1 (string cadena){
 
     string cadena1 = cadena.substr(0, n);
     string cadena2 = cadena1;
-    int unos=contarUnos(cadena1); int ceros=contarCeros(cadena1);
     cout << invAll(cadena1,cadena2);
     archivo << invAll(cadena1,cadena2);
+    int unos=contarUnos(cadena2); int ceros=contarCeros(cadena2);
     for (int i=n; i<int(cadena.size());i+=n){
       string cadena1 = cadena.substr(i, n);
       string cadena2 = cadena1;
@@ -153,14 +170,15 @@ void dMetodo1 (string cadena){
         archivo << inv2(cadena1,cadena2);
 	  }
       else if(unos>ceros){
-      	cout << inv2(cadena1,cadena2);
-        archivo << inv2(cadena1,cadena2);
+      	cout << inv3(cadena1,cadena2);
+        archivo << inv3(cadena1,cadena2);
 	  }
-      unos=contarUnos(cadena1); ceros=contarCeros(cadena1);
+      unos=contarUnos(cadena2); ceros=contarCeros(cadena2);
     }
     cout << endl;
     archivo << endl;
 }
+
 
 
 
