@@ -15,13 +15,16 @@ string invAll(string, string); //Funcion que recibe la cadena a invertir <recibe
 string inv2(string, string); //Funcion que inverte cada 2 bits <recibe la cadena y su copia>
 string inv3(string, string); //funcion que invierte cada 3 bits <recibe la cadena y su copia>
 void Metodo1 (string); //Funcion para el metodo1 de encriptacion <recibe el str a encriptar>
+void dMetodo1 (string cadena); //Funcion para desencriptar metodo1 <recibe el str a desencriptar>
 
 int main(){
 	
 	string myString = lectura("cadena.txt"); //Cargamos cadena a convertir a binario
 	strToBin(myString); //Invocamos la funcion
 	string cadena = lectura("prueba.txt"); //Cargamos el binario ya convertido (el cual fue escrito en el archivo prueba.txt) 
-	Metodo1(cadena);  
+	Metodo1(cadena); 
+	cadena = lectura("encriptado1.txt");
+	dMetodo1(cadena); 
 	return 0;
 }
 
@@ -123,6 +126,41 @@ void Metodo1 (string cadena){
     archivo << endl;
 }
 
+void dMetodo1 (string cadena){
+	//En este metodo a mi parecer cuando hayan mas ceros que unos se debe invertir cada 3
+	//Pero esta funcionando correctamente invirtiendo cada 2 igual que cuando hay mayor numero 
+    int n;
+    cout << "Ingrese el numero para las particiones: "; cin >> n;
+    cout << cadena << endl;
+    ofstream archivo;
+  	archivo.open("desencriptado1.txt",ios::out); //Creamos archivo para guardar la encriptación
+
+    string cadena1 = cadena.substr(0, n);
+    string cadena2 = cadena1;
+    int unos=contarUnos(cadena1); int ceros=contarCeros(cadena1);
+    cout << invAll(cadena1,cadena2);
+    archivo << invAll(cadena1,cadena2);
+    for (int i=n; i<int(cadena.size());i+=n){
+      string cadena1 = cadena.substr(i, n);
+      string cadena2 = cadena1;
+      if(unos==ceros){
+      	cout << invAll(cadena1,cadena2);
+        archivo << invAll(cadena1,cadena2);
+	  }
+        
+      else if(ceros>unos){
+	    cout << inv2(cadena1,cadena2);
+        archivo << inv2(cadena1,cadena2);
+	  }
+      else if(unos>ceros){
+      	cout << inv2(cadena1,cadena2);
+        archivo << inv2(cadena1,cadena2);
+	  }
+      unos=contarUnos(cadena1); ceros=contarCeros(cadena1);
+    }
+    cout << endl;
+    archivo << endl;
+}
 
 
 
