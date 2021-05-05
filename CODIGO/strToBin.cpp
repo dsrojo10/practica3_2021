@@ -28,7 +28,7 @@ int main(){
 	dMetodo1(cadena);
 	cadena = lectura("desencriptado1.txt"); //Cargamos el archivo binario ya desencriptado, antes de convertirlo a string de nuevo
     cout << cadena;
-	binToStr(cadena);  
+	binToStr(cadena);  //Invocamos la funcion que convierte de bin(str) a caracter(str) 
 	
 	return 0;
 }
@@ -178,7 +178,3 @@ void dMetodo1 (string cadena){
     cout << endl;
     archivo << endl;
 }
-
-
-
-

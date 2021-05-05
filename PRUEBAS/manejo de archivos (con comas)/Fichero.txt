@@ -1,0 +1,3 @@
+david rojo,1,24.12
+tulio rojo,2,125.25
+tulio mario,1990,125
