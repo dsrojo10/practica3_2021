@@ -20,11 +20,11 @@ void dMetodo1 (string); //Funcion para desencriptar metodo1 <recibe el str a des
 
 int main(){
 	
-	string myString = lectura("cadena.txt"); //Cargamos cadena a convertir a binario
-	strToBin(myString); //Invocamos la funcion
-	string cadena = lectura("prueba.txt"); //Cargamos el binario ya convertido (el cual fue escrito en el archivo prueba.txt) 
-	Metodo1(cadena); 
-	cadena = lectura("encriptado1.txt");
+	//string myString = lectura("cadena.txt"); //Cargamos cadena a convertir a binario
+	//strToBin(myString); //Invocamos la funcion
+	//string cadena = lectura("binario.txt"); //Cargamos el binario ya convertido (el cual fue escrito en el archivo prueba.txt) 
+	//Metodo1(cadena); 
+	string cadena = lectura("encriptado1.txt");
 	dMetodo1(cadena);
 	cadena = lectura("desencriptado1.txt"); //Cargamos el archivo binario ya desencriptado, antes de convertirlo a string de nuevo
     cout << cadena;
@@ -35,7 +35,7 @@ int main(){
 
 void strToBin (string cadena){
   ofstream archivo;
-  archivo.open("prueba.txt",ios::out); //Abriendo archivo
+  archivo.open("binario.txt",ios::out); //Abriendo archivo
   for (size_t i = 0; i < (cadena.size()-1); ++i){ //**Acá vamos a restar un ciclo para no codificar el salto de linea
     archivo << bitset<8>(cadena.c_str()[i]);
     //cout << bitset<8>(cadena.c_str()[i]); //Impresion por consola para verificar.

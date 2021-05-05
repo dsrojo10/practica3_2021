@@ -11,3 +11,4 @@ procesos:
 
 case 2:
 
+sudo.txt -> encriptado metodo1 con n=5.
