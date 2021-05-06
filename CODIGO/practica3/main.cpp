@@ -24,11 +24,11 @@ string inv2(string,string&); //Funcion que inverte cada 2 bits <recibe la cadena
 string inv3(string,string&); //funcion que invierte cada 3 bits <recibe la cadena y su copia>
 
 ////////////////////////////////FUNCIONES METODO 1/////////////////////////////////////////
-void Metodo1 (string); //Funcion para el metodo1 de encriptacion <recibe el str a encriptar>
+void Metodo1 (string, string); //Funcion para el metodo1 de encriptacion <recibe el str a encriptar> y el nombre del archivo de salida
 void dMetodo1 (string); //Funcion para desencriptar metodo1 <recibe el str a desencriptar>
 
-void encriptacion1(string, string); //Funcion para encriptar recibe el nombre del archivo <nombrecadena.txt> y salida
-void desencriptacion1(string, string); //Funcion para desencriptar recibe nombres de archivos de entrada y salida
+void encriptar1(string, string); //recibe archivo de entrada y de salida.  con .txt
+void desencriptar1(string, string); //recibe archivo de entrada y de salida. con .txt
 
 ///////////////////FUNCIONES PROPIAS PARA VERIFICAR UN CORRECTO DESARROLLO////////////////////
 void Verificacion1(); //Función para encriptar y desencriptar metodo1 recibe <nombrecadena.txt>
@@ -40,12 +40,18 @@ void appBanco();
 
 void addRegister (); //Agregar registro
 void readRegister(); //Leer todos los registros
+void readRegister(string archivo); //[SOBRECARGADO]
 void searchRegisterAdmin(); //Buscar un registro en especifico por clave (admin)
+void searchRegisterAdmin(string archivo); //[SOBRECARGADO]
 void deleteRegister(); //Eliminar registro especifico por clave
+void deleteRegister(string archivo); //[SOBRECARGADO]
 void editRegisterAdmin(); //Editar registro especifico por clave
+void editRegisterAdmin(string archivo); //[SOBRECARGADO]
 
 void searchRegisterUser(); //Buscar un registro en especifico por cedula y clave (usuario)
+void searchRegisterUser(string archivo); //[SOBRECARGADO]
 void editRegisterUser(); //Editar registro especifico por cedula y clave
+void editRegisterUser(string archivo); // [SOBRECARGADO]
 void editPasswordUser(); //Editar clave de registro en especifico por cedula y clave
 
 
@@ -65,9 +71,7 @@ int main(){
     switch (opcion) {
 
     case 1: {
-        //Verificacion1();
-        encriptacion1("cadena.txt","encriptado1.txt");
-        desencriptacion1("encriptado1.txt","desen_cadena.txt");
+        Verificacion1();
         //desencriptacion1("sudo.txt","verificacion.txt");
         break;
     }
@@ -90,7 +94,7 @@ int main(){
 //////////////FUNCIONES PARA CONVERTIR/////////////////////////
 void strToBin (string cadena){
   ofstream archivo;
-  archivo.open("bin.txt",ios::out); //Abriendo archivo
+  archivo.open("binario.txt",ios::out); //Abriendo archivo
   for (size_t i = 0; i < (cadena.size()-1); ++i){ //**Acá vamos a restar un ciclo para no codificar el salto de linea
     archivo << bitset<8>(cadena.c_str()[i]);
     //cout << bitset<8>(cadena.c_str()[i]); //Impresion por consola para verificar.
@@ -98,17 +102,18 @@ void strToBin (string cadena){
   archivo.close();
 }
 
-void binToStr(string cadena, string ArchivoOut) {
+void binToStr(string cadena, string archOut) {
   ofstream archivo;
-  archivo.open(ArchivoOut,ios::out); //Abriendo archivo
+  archivo.open(archOut.c_str(),ios::out); //Abriendo archivo
   for (int i=0; i<int(cadena.size());i+=8){
     if(cadena[i]!='\n'){
         string cadena1 = cadena.substr(i, 8);
-        //cout << char(bitset<8>(cadena1).to_ulong());
+        cout << char(bitset<8>(cadena1).to_ulong());
         archivo << char(bitset<8>(cadena1).to_ulong());
       }
     }
     archivo.close();
+    cout << endl;
 }
 
 
@@ -170,104 +175,105 @@ string inv3(string cadena, string& cadena2){
 }
 
 ////////////FUNCIONES METODO 1 (ENCRIPTADO Y DESENCRIPTADO)/////////
-void Metodo1 (string cadena){
+void Metodo1 (string cadena, string archOut){
     int n;
-    cout << "Ingrese el numero para las particiones(encriptar): "; cin >> n;
-//    cout << cadena << endl;
+    cout << "Ingrese el numero para las particiones: "; cin >> n;
+    cout << cadena << endl;
     ofstream archivo;
-    archivo.open("encriptado1.txt",ios::out); //Creamos archivo para guardar la encriptación
+    archivo.open(archOut.c_str(),ios::out); //Creamos archivo para guardar la encriptación
 
     string cadena1 = cadena.substr(0, n);
     string cadena2 = cadena1;
     int unos=contarUnos(cadena1); int ceros=contarCeros(cadena1);
-//    cout << invAll(cadena1,cadena2);
+    cout << invAll(cadena1,cadena2);
     archivo << invAll(cadena1,cadena2);
     for (int i=n; i<int(cadena.size());i+=n){
       string cadena1 = cadena.substr(i, n);
       string cadena2 = cadena1;
       if(unos==ceros){
-//        cout << invAll(cadena1,cadena2);
+        cout << invAll(cadena1,cadena2);
         archivo << invAll(cadena1,cadena2);
       }
 
       else if(ceros>unos){
-//        cout << inv2(cadena1,cadena2);
+        cout << inv2(cadena1,cadena2);
         archivo << inv2(cadena1,cadena2);
       }
       else if(unos>ceros){
-//        cout << inv3(cadena1,cadena2);
+        cout << inv3(cadena1,cadena2);
         archivo << inv3(cadena1,cadena2);
       }
       unos=contarUnos(cadena1); ceros=contarCeros(cadena1);
     }
-//    cout << endl;
+    cout << endl;
     archivo << endl;
 }
 
 void dMetodo1 (string cadena){
     //En la desencriptacion no evaluamos en la vieja, si no que evaluamos en la que acabo de ser convertida
     int n;
-    cout << "Ingrese el numero para las particiones(desencriptar): "; cin >> n;
-//    cout << cadena << endl;
+    cout << "Ingrese el numero para las particiones: "; cin >> n;
+    cout << cadena << endl;
     ofstream archivo;
     archivo.open("desencriptado1.txt",ios::out); //Creamos archivo para guardar la encriptación
 
     string cadena1 = cadena.substr(0, n);
     string cadena2 = cadena1;
-//    cout << invAll(cadena1,cadena2);
+    cout << invAll(cadena1,cadena2);
     archivo << invAll(cadena1,cadena2);
     int unos=contarUnos(cadena2); int ceros=contarCeros(cadena2);
     for (int i=n; i<int(cadena.size());i+=n){
       string cadena1 = cadena.substr(i, n);
       string cadena2 = cadena1;
       if(unos==ceros){
-//        cout << invAll(cadena1,cadena2);
+        cout << invAll(cadena1,cadena2);
         archivo << invAll(cadena1,cadena2);
       }
 
       else if(ceros>unos){
-//        cout << inv2(cadena1,cadena2);
+        cout << inv2(cadena1,cadena2);
         archivo << inv2(cadena1,cadena2);
       }
       else if(unos>ceros){
-//        cout << inv3(cadena1,cadena2);
+        cout << inv3(cadena1,cadena2);
         archivo << inv3(cadena1,cadena2);
       }
       unos=contarUnos(cadena2); ceros=contarCeros(cadena2);
     }
-//    cout << endl;
+    cout << endl;
     archivo << endl;
 }
 
 /////////FUNCIONES QUE USO PARA VERIFICAR UN CORRECTO DESARROLLO////
 void Verificacion1() {
     string archivoIn, archivoOut;
-    cout << "Ingrese el nombre del archivo a convertir: "; cin >> archivoIn;//cadena.txt
-    cout << "Ingrese el nombre del archivo donde guardar el encriptado: "; cin >> archivoOut;//encriptado1.txt
+    cout << "Ingrese el nombre del archivo a encriptar:"; cin >> archivoIn;
+    cout << "Ingrese el nombre del archivo donde guardar el encriptado:"; cin >> archivoOut;
+    encriptar1(archivoIn, archivoOut);
 
-    encriptacion1(archivoIn, archivoOut);
-
-
-    cout << "Ingrese el nombre del archivo encriptado: "; cin >> archivoIn; //encriptado1.txt
-    cout << "Ingrese el nombre donde guardar el desencriptado: "; cin >> archivoOut; //verificacioncadena.txt
-
-    desencriptacion1(archivoIn, archivoOut);
+    cout << "Ingrese el nombre del archivo a desencriptar: "; cin >> archivoIn;
+    cout << "Ingrese el nombre del archivo donde guardar el desencriptado:"; cin >> archivoOut;
+    desencriptar1(archivoIn, archivoOut);
 }
 
-void encriptacion1(string Narchivo, string Narchivo2) {
-    string myString = lectura(Narchivo); //Cargamos cadena a convertir a binario
+void encriptar1 (string archivoIn, string archivoOut) {
+//	archivoIn="cadena.txt";
+    string myString = lectura(archivoIn); //Cargamos cadena a convertir a binario
     strToBin(myString); //Invocamos la funcion
-    string cadena = lectura("bin.txt"); //Cargamos el binario ya convertido (el cual fue escrito en el archivo prueba.txt)
-    Metodo1(cadena);
-    cadena = lectura(Narchivo2); //encriptado1.txt
+    string cadena = lectura("binario.txt"); //Cargamos el binario ya convertido (el cual fue escrito en el archivo prueba.txt)
+    remove("binario.txt");
+//	archivoOut="encriptado1.txt";
+    Metodo1(cadena, archivoOut);
 }
 
-void desencriptacion1(string Narchivo, string Narchivo2) {
-    string cadena = lectura(Narchivo);
+void desencriptar1 (string archivoIn, string archivoOut) {
+    //archivoIn = "encriptado1.txt";
+    string cadena = lectura(archivoIn);
     dMetodo1(cadena);
     cadena = lectura("desencriptado1.txt"); //Cargamos el archivo binario ya desencriptado, antes de convertirlo a string de nuevo
-    //cout << cadena;
-    binToStr(cadena, Narchivo2);  //Invocamos la funcion que convierte de bin(str) a caracter(str)
+    cout << cadena;
+    //archivoOut="Desencrip_Str.txt";
+    binToStr(cadena, archivoOut);  //Invocamos la funcion que convierte de bin(str) a caracter(str)
 }
 
 
@@ -286,7 +292,7 @@ void appBanco(){
     string password;
     cout << "Ingrese su clave: "; cin>>password;
     cout << "Las particiones deben ser 5..." << endl;
-    desencriptacion1("sudo.txt","odus.txt"); //odus es sudo al reves, archivo temp donde guardo el mensaje desencriptado
+    desencriptar1("sudo.txt","odus.txt"); //odus es sudo al reves, archivo temp donde guardo el mensaje desencriptado
     string cadena = lectura("odus.txt");
     remove("odus.txt"); //ELIMINAR FICHERO
     bool flag = true;
@@ -306,26 +312,63 @@ void appBanco(){
             cin >> opcion;
 
             switch(opcion) {
-            case 1:
-                addRegister();
-                break;
-
-            case 2:
-                readRegister();
-                break;
-
-            case 3:
-                searchRegisterAdmin();
-                break;
-
-            case 4:
-                deleteRegister();
-                break;
-
-            case 5:
-                editRegisterAdmin();
+            case 1:{
+                int flag = 0;
+                do{
+                    addRegister();
+                    cout << "Desea agregar otro usuario?" << endl;
+                    cout << "0. SI         1. NO\n"; cin >> flag;
+                }
+                while(flag==0);
+                ofstream Temp;
+                Temp.open("Temp.txt");
+                encriptar1("FicheroBanco.txt", "Temp.txt");
+                Temp.close();
+                remove("FicheroBanco.txt"); //ELIMINAR FICHERO
+                rename("Temp.txt","FicheroBanco.txt"); //RENOMBRAMOS A TEMP -> COMO FICHERO
                 break;
             }
+
+            case 2:{
+                ofstream Temp;
+                Temp.open("Temp.txt");
+                desencriptar1("FicheroBanco.txt", "Temp.txt");
+                readRegister("Temp.txt");
+                break;
+            }
+
+            case 3:{
+                ofstream Temp;
+                Temp.open("Temp.txt");
+                desencriptar1("FicheroBanco.txt", "Temp.txt");
+                searchRegisterAdmin("Temp.txt");
+                remove("FicheroBanco.txt");
+                encriptar1("Temp.txt","FicheroBanco.txt");
+                break;
+            }
+
+            case 4:{
+                ofstream Temp;
+                Temp.open("Temp.txt");
+                desencriptar1("FicheroBanco.txt", "Temp.txt");
+                deleteRegister("Temp.txt");
+                encriptar1("Temporal.txt","FicheroBanco.txt");
+                remove("Temp.txt");
+                remove("Temporal.txt");
+                break;
+            }
+
+            case 5:
+                ofstream Temp;
+                Temp.open("Temp.txt");
+                desencriptar1("FicheroBanco.txt", "Temp.txt");
+                editRegisterAdmin("Temp.txt");
+                encriptar1("Temporal.txt","FicheroBanco.txt");
+                remove("Temp.txt");
+                remove("Temporal.txt");
+                break;
+            }
+            remove("Temp.txt"); //Borramos el desencriptado para que no quede registro.
         }
     }
     else if(flag==false){
@@ -344,14 +387,27 @@ void appBanco(){
 
         switch (opcion2) {
 
-        case 1:
-            searchRegisterUser();
+        case 1:{
+            ofstream Temp;
+            Temp.open("Temp.txt");
+            desencriptar1("FicheroBanco.txt", "Temp.txt");
+            searchRegisterUser("Temp.txt");
+            encriptar1("Temporal.txt","FicheroBanco.txt");
+            remove("Temp.txt");
+            remove("Temporal.txt");
             break;
+        }
 
-        case 2:
-            editRegisterUser();
+        case 2:{
+            ofstream Temp;
+            Temp.open("Temp.txt");
+            desencriptar1("FicheroBanco.txt", "Temp.txt");
+            editRegisterUser("Temp.txt");
+            encriptar1("Temporal.txt","FicheroBanco.txt");
+            remove("Temp.txt");
+            remove("Temporal.txt");
             break;
-
+        }
         case 3:
             editPasswordUser();
             break;
@@ -365,7 +421,6 @@ void appBanco(){
 void addRegister () { //Añadir registro (admin)
     ofstream Guardar;
     Guardar.open("FicheroBanco.txt", ios::app); // app para no se sobreescriba...
-
     cout << "Ingrese cedula: "; cin >> cedula;
     cout << "Ingrese clave: "; cin >> clave;
     cout << "Ingrese saldo: "; cin >> saldo;
@@ -387,6 +442,23 @@ void readRegister() { //Leer registros (admin)
         Leer >> cedula;
     }
     Leer.close();
+}
+
+void readRegister(string archivo) { //Leer registros (admin) [SOBRECARGADO]
+    ifstream Leer;
+    Leer.open(archivo.c_str());
+    Leer >> cedula;
+    cout << endl;
+    while (!Leer.eof()){
+        Leer >> clave >> saldo;
+        cout << "Cedula: " << cedula << endl;
+        cout << "Clave: " << clave << endl;
+        cout << "Saldo: " << saldo << endl;
+        cout << endl;
+        Leer >> cedula;
+    }
+    Leer.close();
+    //remove(archivo.c_str());
 }
 
 void searchRegisterAdmin() { //Buscar registro (admin)
@@ -414,11 +486,36 @@ void searchRegisterAdmin() { //Buscar registro (admin)
         Leer.close();
     }
 
+void searchRegisterAdmin(string archivo) { //Buscar registro (admin)
+    ifstream Leer;
+        int Bcedula;
+        Leer.open(archivo.c_str());
+        bool encontrado = false;
+        Leer >> cedula;
+        cout << "Ingrese cedula a buscar: "; cin >> Bcedula;
+        cout << endl;
+        while (!Leer.eof()) {
+            Leer >> clave >> saldo;
+            if(cedula==Bcedula){
+                encontrado = true;
+                cout << "Cedula: " << cedula << endl;
+                cout << "Clave: " << clave << endl;
+                cout << "Saldo: " << saldo << endl;
+                cout << endl;
+            }
+            Leer >> cedula;
+        }
+        if(encontrado==false){
+            cout << "\nCedula no encontrada.\n\n";
+        }
+        Leer.close();
+    }
+
 void deleteRegister() { //Borrar registro (admin)
     ifstream Leer;
     ofstream Temp;
     Leer.open("FicheroBanco.txt");
-    Temp.open("Temp.txt");
+    Temp.open("Temporal.txt");
     int Bcedula;
     bool encontrado = false;
     Leer >> cedula;
@@ -443,14 +540,46 @@ void deleteRegister() { //Borrar registro (admin)
     Leer.close();
     Temp.close();
     remove("FicheroBanco.txt"); //ELIMINAR FICHERO
-    rename("Temp.txt","FicheroBanco.txt"); //RENOMBRAMOS A TEMP -> COMO FICHERO
+    rename("Temporal.txt","FicheroBanco.txt"); //RENOMBRAMOS A TEMP -> COMO FICHERO
+}
+
+void deleteRegister(string archivo) { //Borrar registro (admin) [SOBRECARGADO]
+    ifstream Leer;
+    ofstream Temp;
+    Leer.open(archivo.c_str());
+    Temp.open("Temporal.txt");
+    int Bcedula;
+    bool encontrado = false;
+    Leer >> cedula;
+    cout << "Ingrese cedula a eliminar: "; cin >> Bcedula;
+    while (!Leer.eof()) {
+        Leer >> clave >> saldo;
+        if(cedula==Bcedula){
+            encontrado = true;
+            cout << "\nCedula: " << cedula << endl;
+            cout << "Clave: " << clave << endl;
+            cout << "Saldo: " << saldo << endl;
+            cout << "\nEliminado...\n\n";
+        }
+        else{
+            Temp << cedula << ' ' << clave << ' ' << saldo <<endl;
+        }
+        Leer >> cedula;
+    }
+    if(encontrado==false){
+        cout << "\nClave no encontrada.\n\n";
+    }
+    Leer.close();
+    Temp.close();
+    remove(archivo.c_str()); //ELIMINAR FICHERO
+    rename("Temporal.txt",archivo.c_str()); //RENOMBRAMOS A TEMP -> COMO FICHERO
 }
 
 void editRegisterAdmin() { //Editar registro (admin)
     ifstream Leer;
     ofstream Temp;
     Leer.open("FicheroBanco.txt");
-    Temp.open("Temp.txt");
+    Temp.open("Temporal.txt");
     int Bcedula;
     float Nsaldo;
     bool encontrado = false;
@@ -479,14 +608,48 @@ void editRegisterAdmin() { //Editar registro (admin)
     Leer.close();
     Temp.close();
     remove("FicheroBanco.txt"); //ELIMINAR FICHERO
-    rename("Temp.txt","FicheroBanco.txt"); //RENOMBRAMOS A TEMP -> COMO FICHERO
+    rename("Temporal.txt","FicheroBanco.txt"); //RENOMBRAMOS A TEMP -> COMO FICHERO
+}
+
+void editRegisterAdmin(string archivo) { //Editar registro (admin) [SOBRECARGADO]
+    ifstream Leer;
+    ofstream Temp;
+    Leer.open(archivo);
+    Temp.open("Temporal.txt");
+    int Bcedula;
+    float Nsaldo;
+    bool encontrado = false;
+    Leer >> cedula;
+    cout << "Ingrese cedula del usuario a modificar: "; cin >> Bcedula;
+    while (!Leer.eof()) {
+        Leer >> clave >> saldo;
+        if(cedula==Bcedula){
+            encontrado = true;
+            cout << "\nCedula: " << cedula << endl;
+            cout << "Clave: " << clave << endl;
+            cout << "Saldo: " << saldo << endl;
+            cout << endl;
+            cout << "Ingrese nuevo saldo: "; cin >> Nsaldo;
+            cout << "\nModificado...\n";
+            Temp << cedula << ' ' << clave << ' ' << Nsaldo <<endl;
+        }
+        else{
+            Temp << cedula << ' ' << clave << ' ' << saldo <<endl;
+        }
+        Leer >> cedula;
+    }
+    if(encontrado==false){
+        cout << "\nCedula no encontrada.\n\n";
+    }
+    Leer.close();
+    Temp.close();
 }
 
 void searchRegisterUser() { //Buscar registro (usuario) cobro 1000 pesos
     ifstream Leer;
     ofstream Temp;
     Leer.open("FicheroBanco.txt");
-    Temp.open("Temp.txt");
+    Temp.open("Temporal.txt");
     int Bcedula, Bclave;
     bool encontrado = false;
     Leer >> cedula;
@@ -518,14 +681,51 @@ void searchRegisterUser() { //Buscar registro (usuario) cobro 1000 pesos
     Leer.close();
     Temp.close();
     remove("FicheroBanco.txt"); //ELIMINAR FICHERO
-    rename("Temp.txt","FicheroBanco.txt"); //RENOMBRAMOS A TEMP -> COMO FICHERO
+    rename("Temporal.txt","FicheroBanco.txt"); //RENOMBRAMOS A TEMP -> COMO FICHERO
+}
+
+void searchRegisterUser(string archivo) { //[SOBRECARGADO]
+    ifstream Leer;
+    ofstream Temp;
+    Leer.open(archivo.c_str());
+    Temp.open("Temporal.txt");
+    int Bcedula, Bclave;
+    bool encontrado = false;
+    Leer >> cedula;
+    cout << "Ingrese cedula: "; cin >> Bcedula;
+    while (!Leer.eof()) {
+        Leer >> clave >> saldo;
+        if(cedula==Bcedula){
+            cout << "Ingrese su clave: "; cin >> Bclave;
+            encontrado = false;
+            if(clave==Bclave){
+                encontrado = true;
+                cout << "\nCedula: " << cedula << endl;
+                cout << "Clave: " << clave << endl;
+                cout << "Saldo: " << saldo << endl;
+                cout << endl;
+                Temp << cedula << ' ' << clave << ' ' << saldo - 1000 <<endl;
+
+
+            }
+        }
+        else{
+            Temp << cedula << ' ' << clave << ' ' << saldo <<endl;
+        }
+        Leer >> cedula;
+    }
+    if(encontrado==false){
+        cout << "\nCedula no encontrada.\n\n";
+    }
+    Leer.close();
+    Temp.close();
 }
 
 void editRegisterUser() {//Editar registro especifico por cedula y clave
     ifstream Leer;
     ofstream Temp;
     Leer.open("FicheroBanco.txt");
-    Temp.open("Temp.txt");
+    Temp.open("Temporal.txt");
     int Bcedula, Bclave;
     float Nsaldo;
     bool encontrado = false;
@@ -546,7 +746,7 @@ void editRegisterUser() {//Editar registro especifico por cedula y clave
                 if(Nsaldo<saldo){ //Verificar que el saldo sea suficiente
                     Temp << cedula << ' ' << clave << ' ' << saldo - Nsaldo <<endl;
                     cout << "\nEntregando dinero...\n";
-                    cout << "\nSaldo disponible despues de transaccion: " << saldo - Nsaldo << endl;
+                    cout << "\nSaldo disponible despues de transaccion: " << saldo - Nsaldo - 1000 << endl;
 
                 }
                 else if(Nsaldo>saldo){
@@ -566,14 +766,60 @@ void editRegisterUser() {//Editar registro especifico por cedula y clave
     Leer.close();
     Temp.close();
     remove("FicheroBanco.txt"); //ELIMINAR FICHERO
-    rename("Temp.txt","FicheroBanco.txt"); //RENOMBRAMOS A TEMP -> COMO FICHERO
+    rename("Temporal.txt","FicheroBanco.txt"); //RENOMBRAMOS A TEMP -> COMO FICHERO
+}
+
+void editRegisterUser(string archivo) {// [SOBRECARGADO]
+    ifstream Leer;
+    ofstream Temp;
+    Leer.open(archivo.c_str());
+    Temp.open("Temporal.txt");
+    int Bcedula, Bclave;
+    float Nsaldo;
+    bool encontrado = false;
+    Leer >> cedula;
+    cout << "Ingrese cedula: "; cin >> Bcedula;
+    while (!Leer.eof()) {
+        Leer >> clave >> saldo;
+        if(cedula==Bcedula){
+            cout << "Ingrese su clave: "; cin >> Bclave;
+            encontrado = false;
+            if(clave==Bclave){
+                encontrado = true;
+                cout << "\nCedula: " << cedula << endl;
+                cout << "Clave: " << clave << endl;
+                cout << "Saldo: " << saldo << endl;
+                cout << endl;
+                cout << "Cuanto desea retirar: "; cin >> Nsaldo;
+                if(Nsaldo<saldo){ //Verificar que el saldo sea suficiente
+                    Temp << cedula << ' ' << clave << ' ' << saldo - Nsaldo - 1000 <<endl;
+                    cout << "\nEntregando dinero...\n";
+                    cout << "\nSaldo disponible despues de transaccion: " << saldo - Nsaldo - 1000 << endl;
+
+                }
+                else if(Nsaldo>saldo){
+                    Temp << cedula << ' ' << clave << ' ' << saldo <<endl;
+                    cout << "SALDO INSUFICIENTE...\n";
+                }
+            }
+        }
+        else{
+            Temp << cedula << ' ' << clave << ' ' << saldo <<endl;
+        }
+        Leer >> cedula;
+    }
+    if(encontrado==false){
+        cout << "\nCedula no encontrada.\n\n";
+    }
+    Leer.close();
+    Temp.close();
 }
 
 void editPasswordUser(){ //Editar clave de usuario especifico por cedula y clave
     ifstream Leer;
     ofstream Temp;
     Leer.open("FicheroBanco.txt");
-    Temp.open("Temp.txt");
+    Temp.open("Temporal.txt");
     int Bcedula, Bclave, Nclave, Nclave2; //Bclave = clave a buscar... Nclave = nueva clave
     bool encontrado = false;
     Leer >> cedula;
@@ -613,5 +859,5 @@ void editPasswordUser(){ //Editar clave de usuario especifico por cedula y clave
     Leer.close();
     Temp.close();
     remove("FicheroBanco.txt"); //ELIMINAR FICHERO
-    rename("Temp.txt","FicheroBanco.txt"); //RENOMBRAMOS A TEMP -> COMO FICHERO
+    rename("Temporal.txt","FicheroBanco.txt"); //RENOMBRAMOS A TEMP -> COMO FICHERO
 }
