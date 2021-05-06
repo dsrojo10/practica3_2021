@@ -765,8 +765,8 @@ void editRegisterUser() {//Editar registro especifico por cedula y clave
     }
     Leer.close();
     Temp.close();
-    remove("FicheroBanco.txt"); //ELIMINAR FICHERO
-    rename("Temporal.txt","FicheroBanco.txt"); //RENOMBRAMOS A TEMP -> COMO FICHERO
+//    remove("FicheroBanco.txt"); //ELIMINAR FICHERO
+//    rename("Temporal.txt","FicheroBanco.txt"); //RENOMBRAMOS A TEMP -> COMO FICHERO
 }
 
 void editRegisterUser(string archivo) {// [SOBRECARGADO]
