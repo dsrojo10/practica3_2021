@@ -80,7 +80,11 @@ int main(){
 
     case 1: {
         Verificacion1();
-        //desencriptacion1("sudo.txt","verificacion.txt");
+//        desencriptar1("sudo.txt","verificacion.txt");
+//        string archivoIn, archivoOut;
+//        cout << "Ingrese el nombre del archivo a encriptar:"; cin >> archivoIn;
+//        cout << "Ingrese el nombre del archivo donde guardar el encriptado:"; cin >> archivoOut;
+//        desencriptar1(archivoIn.c_str(), archivoOut.c_str());
         break;
     }
 
@@ -253,6 +257,26 @@ void dMetodo1 (string cadena){
     archivo << endl;
 }
 
+void encriptar1 (string archivoIn, string archivoOut) {
+//	archivoIn="cadena.txt";
+    string myString = lectura(archivoIn); //Cargamos cadena a convertir a binario
+    strToBin(myString); //Invocamos la funcion
+    string cadena = lectura("binario.txt"); //Cargamos el binario ya convertido (el cual fue escrito en el archivo prueba.txt)
+    remove("binario.txt");
+//	archivoOut="encriptado1.txt";
+    Metodo1(cadena, archivoOut);
+}
+
+void desencriptar1 (string archivoIn, string archivoOut) {
+    //archivoIn = "encriptado1.txt";
+    string cadena = lectura(archivoIn);
+    dMetodo1(cadena);
+    cadena = lectura("desencriptado1.txt"); //Cargamos el archivo binario ya desencriptado, antes de convertirlo a string de nuevo
+    cout << cadena;
+    //archivoOut="Desencrip_Str.txt";
+    binToStr(cadena, archivoOut);  //Invocamos la funcion que convierte de bin(str) a caracter(str)
+}
+
 ////////////FUNCIONES METODO 2 (ENCRIPTADO Y DESENCRIPTADO)/////////
 void Metodo2(string cadena, string archOut) {
   int n;
@@ -323,55 +347,6 @@ void dMetodo2(string cadena){
   archivo << cadena2 << endl;
 }
 
-
-/////////FUNCIONES QUE USO PARA VERIFICAR UN CORRECTO DESARROLLO////
-void Verificacion1() {
-    string archivoIn, archivoOut;
-    cout << "Ingrese el nombre del archivo a encriptar:"; cin >> archivoIn;
-    cout << "Ingrese el nombre del archivo donde guardar el encriptado:"; cin >> archivoOut;
-    encriptar1(archivoIn, archivoOut);
-
-    cout << "Ingrese el nombre del archivo a desencriptar: "; cin >> archivoIn;
-    cout << "Ingrese el nombre del archivo donde guardar el desencriptado:"; cin >> archivoOut;
-    desencriptar1(archivoIn, archivoOut);
-}
-
-void encriptar1 (string archivoIn, string archivoOut) {
-//	archivoIn="cadena.txt";
-    string myString = lectura(archivoIn); //Cargamos cadena a convertir a binario
-    strToBin(myString); //Invocamos la funcion
-    string cadena = lectura("binario.txt"); //Cargamos el binario ya convertido (el cual fue escrito en el archivo prueba.txt)
-    remove("binario.txt");
-//	archivoOut="encriptado1.txt";
-    Metodo1(cadena, archivoOut);
-}
-
-void desencriptar1 (string archivoIn, string archivoOut) {
-    //archivoIn = "encriptado1.txt";
-    string cadena = lectura(archivoIn);
-    dMetodo1(cadena);
-    cadena = lectura("desencriptado1.txt"); //Cargamos el archivo binario ya desencriptado, antes de convertirlo a string de nuevo
-    cout << cadena;
-    //archivoOut="Desencrip_Str.txt";
-    binToStr(cadena, archivoOut);  //Invocamos la funcion que convierte de bin(str) a caracter(str)
-}
-
-void Verificacion2() {
-    string archivoIn1, archivoOut1;
-    string archivoIn2, archivoOut2;
-    cout<<"\tRECUERDE QUE TODOS LOS ARCHIVOS DEBEN LLEVAR .txt AL FINAL"<<endl;
-    cout << "Ingrese el nombre del archivo a encriptar:"; cin >> archivoIn1;
-    cout << "Ingrese el nombre del archivo donde guardar el encriptado:"; cin >> archivoOut1;
-    encriptar2(archivoIn1, archivoOut1);
-
-    cout << "Ingrese el nombre del archivo a desencriptar: "; cin >> archivoIn2;
-    cout << "Ingrese el nombre del archivo donde guardar el desencriptado:"; cin >> archivoOut2;
-    desencriptar2(archivoIn2, archivoOut2);
-    // estos dos remove se usan en caso de no querer dejar registro, si se quiere verificar los archivos se comentan
-//    remove("desencriptado2.txt");
-//    remove(archivoOut1.c_str());
-}
-
 void encriptar2 (string archivoIn, string archivoOut) {
 //	archivoIn="cadena.txt";
     string myString = lectura(archivoIn); //Cargamos cadena a convertir a binario
@@ -391,6 +366,74 @@ void desencriptar2 (string archivoIn, string archivoOut) {
     //archivoOut="Desencrip_Str.txt";
     binToStr(cadena, archivoOut);  //Invocamos la funcion que convierte de bin(str) a caracter(str)
 }
+
+
+
+/////////FUNCIONES QUE USO PARA VERIFICAR UN CORRECTO DESARROLLO////
+void Verificacion1() {
+    int op;
+    string archivoIn, archivoOut;
+    cout<<"1. Encriptar\n";
+    cout<<"2. Desencriptar\n";
+    cout<<"3. Ambos\n";
+    cout<<"Seleccione una opcion: "; cin>>op;
+    switch (op) {
+    case 1:
+        cout << "Ingrese el nombre del archivo a encriptar:"; cin >> archivoIn;
+        cout << "Ingrese el nombre del archivo donde guardar el encriptado:"; cin >> archivoOut;
+        encriptar1(archivoIn.c_str(), archivoOut.c_str());
+        break;
+
+    case 2:
+        cout << "Ingrese el nombre del archivo a desencriptar: "; cin >> archivoIn;
+        cout << "Ingrese el nombre del archivo donde guardar el desencriptado:"; cin >> archivoOut;
+        desencriptar1(archivoIn.c_str(), archivoOut.c_str());
+        break;
+
+    case 3:
+        cout << "Ingrese el nombre del archivo a encriptar:"; cin >> archivoIn;
+        cout << "Ingrese el nombre del archivo donde guardar el encriptado:"; cin >> archivoOut;
+        encriptar1(archivoIn.c_str(), archivoOut.c_str());
+        cout << "Ingrese el nombre del archivo a desencriptar: "; cin >> archivoIn;
+        cout << "Ingrese el nombre del archivo donde guardar el desencriptado:"; cin >> archivoOut;
+        desencriptar1(archivoIn.c_str(), archivoOut.c_str());
+    }
+}
+
+
+void Verificacion2() {
+    int op;
+    string archivoIn, archivoOut;
+    cout<<"1. Encriptar\n";
+    cout<<"2. Desencriptar\n";
+    cout<<"3. Ambos\n";
+    cout<<"Seleccione una opcion: "; cin>>op;
+    switch (op) {
+    case 1:
+        cout << "Ingrese el nombre del archivo a encriptar:"; cin >> archivoIn;
+        cout << "Ingrese el nombre del archivo donde guardar el encriptado:"; cin >> archivoOut;
+        encriptar2(archivoIn.c_str(), archivoOut.c_str());
+        break;
+
+    case 2:
+        cout << "Ingrese el nombre del archivo a desencriptar: "; cin >> archivoIn;
+        cout << "Ingrese el nombre del archivo donde guardar el desencriptado:"; cin >> archivoOut;
+        desencriptar2(archivoIn.c_str(), archivoOut.c_str());
+        break;
+
+    case 3:
+        cout << "Ingrese el nombre del archivo a encriptar:"; cin >> archivoIn;
+        cout << "Ingrese el nombre del archivo donde guardar el encriptado:"; cin >> archivoOut;
+        encriptar2(archivoIn.c_str(), archivoOut.c_str());
+        cout << "Ingrese el nombre del archivo a desencriptar: "; cin >> archivoIn;
+        cout << "Ingrese el nombre del archivo donde guardar el desencriptado:"; cin >> archivoOut;
+        desencriptar2(archivoIn.c_str(), archivoOut.c_str());
+    }
+}
+// estos dos remove se usan en caso de no querer dejar registro, si se quiere verificar los archivos se comentan
+//    remove("desencriptado2.txt");
+//    remove(archivoOut1.c_str());
+
 
 //////////////////FUNCIONES APP BANCO////////////////////////
 
@@ -497,7 +540,6 @@ void appBanco(){
         int opcion2;
         cout << "\n1. Consultar saldo\n";
         cout << "\n2. Retirar\n";
-        cout << "\n3. Cambiar clave\n";
         cout << "\nSeleccione una opcion:"; cin >> opcion2;
 
         switch (opcion2) {
@@ -523,10 +565,6 @@ void appBanco(){
             remove("Temporal.txt");
             break;
         }
-        case 3:
-            editPasswordUser();
-            break;
-
         }
         break;
     }
@@ -930,49 +968,3 @@ void editRegisterUser(string archivo) {// [SOBRECARGADO]
     Temp.close();
 }
 
-void editPasswordUser(){ //Editar clave de usuario especifico por cedula y clave
-    ifstream Leer;
-    ofstream Temp;
-    Leer.open("FicheroBanco.txt");
-    Temp.open("Temporal.txt");
-    int Bcedula, Bclave, Nclave, Nclave2; //Bclave = clave a buscar... Nclave = nueva clave
-    bool encontrado = false;
-    Leer >> cedula;
-    cout << "Ingrese cedula: "; cin >> Bcedula;
-    while (!Leer.eof()) {
-        Leer >> clave >> saldo;
-        if(cedula==Bcedula){
-            cout << "Ingrese su clave: "; cin >> Bclave;
-            encontrado = false;
-            if(clave==Bclave){
-                encontrado = true;
-                cout << "\nCedula: " << cedula << endl;
-                cout << "Clave: " << clave << endl;
-                cout << "Saldo: " << saldo << endl;
-                cout << endl;
-                cout << "Ingrese su nueva clave: "; cin >> Nclave;
-                cout << "Ingrese otra vez su nueva clave: "; cin >> Nclave2;
-
-                if(Nclave==Nclave2){ //Verificar que el saldo sea suficiente
-                    Temp << cedula << ' ' << Nclave << ' ' << saldo <<endl;
-                    cout << "\nLA CLAVE FUE CAMBIADA CON EXITO...\n";
-                }
-                else if(Nclave!=Nclave2){
-                    cout << "LAS CLAVES NO COINCIDEN...\n";
-                    Temp << cedula << ' ' << clave << ' ' << saldo <<endl;
-                }
-            }
-        }
-        else{
-            Temp << cedula << ' ' << clave << ' ' << saldo <<endl;
-        }
-        Leer >> cedula;
-    }
-    if(encontrado==false){
-        cout << "\nCedula no encontrada.\n\n";
-    }
-    Leer.close();
-    Temp.close();
-    remove("FicheroBanco.txt"); //ELIMINAR FICHERO
-    rename("Temporal.txt","FicheroBanco.txt"); //RENOMBRAMOS A TEMP -> COMO FICHERO
-}
